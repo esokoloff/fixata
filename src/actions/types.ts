@@ -24,7 +24,7 @@ type ActionsModel =
   | { type: 'CLEAR_CURRENT' }
   | { type: 'UPDATE_LOG' }
   | { type: 'CLEAR_LOGS' }
-  | { type: 'SET_LOADING'; payload: boolean }
+  | { type: 'SET_LOADING' }
   | { type: 'LOGS_ERROR'; payload: string }
   | { type: 'SEARCH_LOGS' }
   | { type: 'GET_TECHS' }
