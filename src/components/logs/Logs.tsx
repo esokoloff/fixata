@@ -5,25 +5,23 @@ import Preloader from '../layout/Preloader';
 import { LogStateModel } from '../../reducers/logReducer';
 import { AppState } from '../../reducers';
 import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction, Dispatch } from 'redux';
+import { AnyAction } from 'redux';
 import { getLogs } from '../../actions/logActions';
-
-interface OwnProps {}
 
 interface StateProps {
   log: LogStateModel;
 }
 
 interface DispatchProps {
-  getLogs: () => (dispatch: Dispatch) => Promise<void>;
+  getLogs: () => void;
 }
 
-type Props = OwnProps & StateProps;
+type Props = DispatchProps & StateProps;
 
-const Logs: React.FC<Props> = ({ log: {logs, loading } }) => {
+const Logs: React.FC<Props> = ({ log: { logs, loading }, getLogs }) => {
   useEffect(() => {
     getLogs();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -38,7 +36,7 @@ const Logs: React.FC<Props> = ({ log: {logs, loading } }) => {
       {!loading && logs.length === 0 ? (
         <p className="center">No logs to show...</p>
       ) : (
-        logs.map(log => <LogItem log={log} key={log.id} />)
+        logs.map((log) => <LogItem log={log} key={log.id} />)
       )}
     </ul>
   );
@@ -46,17 +44,19 @@ const Logs: React.FC<Props> = ({ log: {logs, loading } }) => {
 
 const mapStateToProps = (state: AppState): StateProps => {
   return {
-    log: state.log
+    log: state.log,
   };
 };
 
-// const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, AnyAction>
-// ): DispatchProps => {
-//   return {
-//     getLogs: () => dispatch(getLogs)
-//   };
-// };
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<{}, {}, AnyAction>
+): DispatchProps => {
+  return {
+    getLogs: () => dispatch(getLogs()),
+  };
+};
 
-export default connect<StateProps, {}, OwnProps, AppState>(
-  mapStateToProps
+export default connect<StateProps, DispatchProps, {}, AppState>(
+  mapStateToProps,
+  mapDispatchToProps
 )(Logs);
