@@ -1,23 +1,53 @@
 import React, { useState } from 'react';
 import M from 'materialize-css';
+import LogModel from '../../models/LogModel';
+import { connect } from 'react-redux';
+import { AppState } from '../../reducers';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import { addLog } from '../../actions/logActions';
+import { addListener } from 'process';
 
-const AddLogModal: React.FC = () => {
-  const [message, setMessage] = useState('');
-  const [attention, setAttention] = useState(false);
-  const [tech, setTech] = useState('');
+interface DispatchProps {
+  addLog: (log: LogModel) => void;
+}
+
+type Props = DispatchProps;
+
+const defaultLogState: LogModel = {
+  id: '',
+  message: '',
+  attention: false,
+  date: '',
+  tech: '',
+};
+
+type PropsChangeElement = HTMLInputElement | HTMLSelectElement;
+
+const AddLogModal: React.FC<Props> = ({ addLog }) => {
+  const [log, setLog] = useState(defaultLogState);
+
+  const onChange = (e: React.ChangeEvent<PropsChangeElement>) => {
+    e.persist();
+    setLog((prevLog) => ({
+      ...prevLog,
+      [e.target.name]:
+        e.target.name === 'attention' ? !prevLog.attention : e.target.value,
+    }));
+  };
 
   const onSubmit = () => {
-    if(message === '' || tech === '') {
-      M.toast({ html: 'Please, enter a message and tech'});
+    if (log.message === '' || log.tech === '') {
+      M.toast({ html: 'Please, enter a message and tech' });
     } else {
-      console.log(message, tech, attention);
-      
-      // Clear fields
-      setMessage('');
-      setTech('');
-      setAttention(false);
+      console.log(log);
+
+      addLog(log);
+
+      // Reset log state
+      setLog(defaultLogState);
     }
-  }
+  };
 
   return (
     <div id="add-log-modal" className="modal" style={modalStyle}>
@@ -28,10 +58,8 @@ const AddLogModal: React.FC = () => {
             <input
               type="text"
               name="message"
-              value={message}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setMessage(e.target.value)
-              }
+              value={log.message}
+              onChange={onChange}
             />
             <label htmlFor="message" className="active">
               Log Message
@@ -42,11 +70,9 @@ const AddLogModal: React.FC = () => {
           <div className="input-field">
             <select
               name="tech"
-              value={tech}
+              value={log.tech}
               className="browser-default"
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                setTech(e.target.value)
-              }
+              onChange={onChange}
             >
               <option value="" disabled>
                 Select Technitian
@@ -63,12 +89,11 @@ const AddLogModal: React.FC = () => {
               <label>
                 <input
                   type="checkbox"
+                  name="attention"
                   className="filled-in"
-                  checked={attention}
-                  value={attention ? 'true' : 'false'}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    setAttention(!attention);
-                  }}
+                  checked={log.attention}
+                  value={log.attention ? 'true' : 'false'}
+                  onChange={onChange}
                 />
                 <span>Needs attention</span>
               </label>
@@ -89,9 +114,20 @@ const AddLogModal: React.FC = () => {
   );
 };
 
-const modalStyle = {
-  width: '75%',
-  height: '75%'
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<{}, {}, AnyAction>
+): DispatchProps => {
+  return {
+    addLog: (log: LogModel) => dispatch(addLog(log)),
+  };
 };
 
-export default AddLogModal;
+const modalStyle = {
+  width: '75%',
+  height: '75%',
+};
+
+export default connect<{}, DispatchProps, {}, AppState>(
+  null,
+  mapDispatchToProps
+)(AddLogModal);
