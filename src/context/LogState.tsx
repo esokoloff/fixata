@@ -22,7 +22,7 @@ const LogState = (props: any) => {
 
   const getLogs = async () => {
     try {
-      const res = await fetch('/logs');
+      const res = await fetch('/logs?_sort=id&_order=desc');
       const data = await res.json();
 
       dispatch({ type: GET_LOGS, payload: data });
