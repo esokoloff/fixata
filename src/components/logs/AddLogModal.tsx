@@ -1,18 +1,7 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import M from 'materialize-css';
 import LogModel from '../../models/LogModel';
-import { connect } from 'react-redux';
-import { AppState } from '../../reducers';
-import { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
-import { addLog } from '../../actions/logActions';
-import { addListener } from 'process';
-
-interface DispatchProps {
-  addLog: (log: LogModel) => void;
-}
-
-type Props = DispatchProps;
+import logContext from '../../context/logContext';
 
 const defaultLogState: LogModel = {
   id: '',
@@ -24,7 +13,8 @@ const defaultLogState: LogModel = {
 
 type PropsChangeElement = HTMLInputElement | HTMLSelectElement;
 
-const AddLogModal: React.FC<Props> = ({ addLog }) => {
+const AddLogModal: React.FC = () => {
+  const { addLog } = useContext(logContext);
   const [log, setLog] = useState(defaultLogState);
 
   const onChange = (e: React.ChangeEvent<PropsChangeElement>) => {
@@ -40,11 +30,7 @@ const AddLogModal: React.FC<Props> = ({ addLog }) => {
     if (log.message === '' || log.tech === '') {
       M.toast({ html: 'Please, enter a message and tech' });
     } else {
-      console.log(log);
-
       addLog(log);
-
-      // Reset log state
       setLog(defaultLogState);
     }
   };
@@ -114,20 +100,9 @@ const AddLogModal: React.FC<Props> = ({ addLog }) => {
   );
 };
 
-const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, AnyAction>
-): DispatchProps => {
-  return {
-    addLog: (log: LogModel) => dispatch(addLog(log)),
-  };
-};
-
 const modalStyle = {
   width: '75%',
   height: '75%',
 };
 
-export default connect<{}, DispatchProps, {}, AppState>(
-  null,
-  mapDispatchToProps
-)(AddLogModal);
+export default AddLogModal;

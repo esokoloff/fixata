@@ -6,12 +6,11 @@ import AddLogModal from './components/logs/AddLogModal';
 import EditLogModal from './components/logs/EditLogModal';
 import AddTechModal from './components/techs/AddTechModal';
 import TechListModal from './components/techs/TechListModal';
-import { Provider } from 'react-redux';
-import store from './store';
 
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
 import './App.css';
+import LogState from './context/LogState';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -19,7 +18,7 @@ const App: React.FC = () => {
   });
 
   return (
-    <Provider store={store}>
+    <LogState>
       <Fragment>
         <SearchBar />
         <div className="container">
@@ -31,7 +30,7 @@ const App: React.FC = () => {
           <Logs />
         </div>
       </Fragment>
-    </Provider>
+    </LogState>
   );
 };
 
