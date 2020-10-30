@@ -58,12 +58,11 @@ const AddLogModal: React.FC = () => {
           <div className="input-field">
             <select
               name="techsId"
-              placeholder="Select Technician"
               className="browser-default"
               onChange={onChange}
             >
               <option value="" disabled selected>
-                Select technician
+                Select Technician
               </option>
               {!techs.length ? (
                 <option value="" disabled>
