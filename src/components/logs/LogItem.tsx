@@ -1,8 +1,29 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Moment from 'react-moment';
+import logContext from '../../context/log/logContext';
+import techContext from '../../context/tech/techContext';
 import LogModel from '../../models/LogModel';
 
 const LogItem: React.FC<{ log: LogModel }> = ({ log }) => {
+  const { deleteLog } = useContext(logContext);
+  const { techs } = useContext(techContext);
+  const [techName, setTechName] = useState(' undefined ');
+
+  useEffect(() => {
+    const tech = techs.find((tech) => tech.id === parseInt(log.techsId));
+    console.log(tech);
+
+    if (tech) {
+      setTechName(` ${tech.firstName} ${tech.lastName} `);
+    }
+  }, [log.techsId, techs]);
+
+  const onDelete = () => {
+    deleteLog(log.id!);
+
+    M.toast({ html: 'Log deleted successfully' });
+  };
+
   return (
     <li className="collection-item">
       <div>
@@ -16,11 +37,11 @@ const LogItem: React.FC<{ log: LogModel }> = ({ log }) => {
         </a>
         <br />
         <span className="grey-text">
-          <span className="black-text">ID #{log.id}</span> last updated by{' '}
-          <span className="black-text">{log.tech}</span> on{' '}
-          <Moment format="MMMM Do YYYY, h:mm:ss a">{log.date}</Moment>
+          <span className="black-text">ID #{log.id}</span> last updated by
+          <span className="black-text">{techName}</span>
+          on <Moment format="MMMM Do YYYY, h:mm:ss a">{log.date}</Moment>
         </span>
-        <a href="#!" className="secondary-content">
+        <a href="#!" className="secondary-content" onClick={onDelete}>
           <i className="material-icons grey-text">delete</i>
         </a>
       </div>

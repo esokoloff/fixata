@@ -1,4 +1,5 @@
 import LogModel from '../models/LogModel';
+import TechModel from '../models/TechModel';
 
 export const GET_LOGS = 'GET_LOGS';
 export const ADD_LOG = 'ADD_LOG';
@@ -28,7 +29,7 @@ interface AddLogAction {
 
 interface DeleteLogAction {
   type: typeof DELETE_LOG;
-  payload: string;
+  payload: number;
 }
 
 interface SetCurrentAction {
@@ -49,6 +50,21 @@ interface ClearLogErrorAction {
   type: typeof CLEAR_LOGS_ERROR;
 }
 
+interface GetTechsAction {
+  type: typeof GET_TECHS;
+  payload: TechModel[];
+}
+
+interface AddTechAction {
+  type: typeof ADD_TECH;
+  payload: TechModel;
+}
+
+interface SetTechErrorAction {
+  type: typeof TECHS_ERROR;
+  payload: string;
+}
+
 export type LogActionTypes =
   | GetLogsAction
   | AddLogAction
@@ -57,3 +73,8 @@ export type LogActionTypes =
   | ClearCurrentAction
   | SetLogErrorActon
   | ClearLogErrorAction;
+
+export type TechActionTypes =
+  | GetTechsAction
+  | AddTechAction
+  | SetTechErrorAction;

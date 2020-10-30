@@ -1,9 +1,9 @@
 import React, { useReducer } from 'react';
-import LogContext, { LogContextProps } from './logContext';
-import LogModel from '../models/LogModel';
+import LogContext from './logContext';
+import LogModel from '../../models/LogModel';
 import logReducer from './logReducer';
-import { GET_LOGS, LOGS_ERROR } from './types';
-import { ADD_LOG } from './types';
+import { DELETE_LOG, GET_LOGS, LOGS_ERROR } from '../types';
+import { ADD_LOG } from '../types';
 
 export interface LogStateProps {
   logs: LogModel[];
@@ -24,7 +24,7 @@ const LogState = (props: any) => {
     try {
       const res = await fetch('/logs?_sort=id&_order=desc');
       const data = await res.json();
-
+      console.log(data);
       dispatch({ type: GET_LOGS, payload: data });
     } catch (err) {
       dispatch({ type: LOGS_ERROR, payload: err.response.data });
@@ -32,6 +32,8 @@ const LogState = (props: any) => {
   };
 
   const addLog = async (log: LogModel) => {
+    log.date = new Date().toString();
+
     const options = {
       method: 'POST',
       headers: {
@@ -56,14 +58,28 @@ const LogState = (props: any) => {
     }
   };
 
-  const contextPropsValues: LogContextProps = {
-    ...state,
-    getLogs,
-    addLog,
+  const deleteLog = async (id: number) => {
+    const options = {
+      method: 'DELETE',
+    };
+
+    try {
+      await fetch(`/logs/${id}`, options);
+
+      dispatch({
+        type: DELETE_LOG,
+        payload: id,
+      });
+    } catch (err) {
+      dispatch({
+        type: LOGS_ERROR,
+        payload: err.response.data,
+      });
+    }
   };
 
   return (
-    <LogContext.Provider value={contextPropsValues}>
+    <LogContext.Provider value={{ ...state, getLogs, addLog, deleteLog }}>
       {props.children}
     </LogContext.Provider>
   );

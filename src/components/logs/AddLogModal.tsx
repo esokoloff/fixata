@@ -1,37 +1,39 @@
 import React, { useContext, useState } from 'react';
 import M from 'materialize-css';
 import LogModel from '../../models/LogModel';
-import logContext from '../../context/logContext';
+import logContext from '../../context/log/logContext';
+import techContext from '../../context/tech/techContext';
 
 const defaultLogState: LogModel = {
-  id: '',
   message: '',
   attention: false,
   date: '',
-  tech: '',
+  techsId: '',
 };
 
 type PropsChangeElement = HTMLInputElement | HTMLSelectElement;
 
 const AddLogModal: React.FC = () => {
   const { addLog } = useContext(logContext);
+  const { techs } = useContext(techContext);
   const [log, setLog] = useState(defaultLogState);
 
   const onChange = (e: React.ChangeEvent<PropsChangeElement>) => {
-    e.persist();
+    const { name, value } = e.target;
+
     setLog((prevLog) => ({
       ...prevLog,
-      [e.target.name]:
-        e.target.name === 'attention' ? !prevLog.attention : e.target.value,
+      [name]: name === 'attention' ? !prevLog.attention : value,
     }));
   };
 
   const onSubmit = () => {
-    if (log.message === '' || log.tech === '') {
-      M.toast({ html: 'Please, enter a message and tech' });
+    if (log.message === '' || !log.techsId) {
+      M.toast({ html: 'Please, enter a messege and tech' });
     } else {
       addLog(log);
       setLog(defaultLogState);
+      M.toast({ html: 'Log added successfully' });
     }
   };
 
@@ -55,17 +57,25 @@ const AddLogModal: React.FC = () => {
         <div className="row">
           <div className="input-field">
             <select
-              name="tech"
-              value={log.tech}
+              name="techsId"
+              placeholder="Select Technician"
               className="browser-default"
               onChange={onChange}
             >
-              <option value="" disabled>
-                Select Technitian
+              <option value="" disabled selected>
+                Select technician
               </option>
-              <option value="John Doe">John Doe</option>
-              <option value="Sam Smith">Sam Smith</option>
-              <option value="Sara Wilson">Sara Wilson</option>
+              {!techs.length ? (
+                <option value="" disabled>
+                  No technicians available
+                </option>
+              ) : (
+                techs.map((tech) => (
+                  <option value={tech.id} key={tech.id}>
+                    {tech.firstName} {tech.lastName}
+                  </option>
+                ))
+              )}
             </select>
           </div>
         </div>

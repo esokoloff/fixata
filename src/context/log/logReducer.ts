@@ -1,4 +1,4 @@
-import { ADD_LOG, GET_LOGS, LogActionTypes } from './types';
+import { ADD_LOG, DELETE_LOG, GET_LOGS, LogActionTypes } from '../types';
 import { LogStateProps } from './LogState';
 
 export default (state: LogStateProps, action: LogActionTypes) => {
@@ -8,6 +8,12 @@ export default (state: LogStateProps, action: LogActionTypes) => {
     }
     case ADD_LOG: {
       return { ...state, logs: [action.payload, ...state.logs] };
+    }
+    case DELETE_LOG: {
+      return {
+        ...state,
+        logs: state.logs.filter((log) => log.id !== action.payload),
+      };
     }
     default: {
       return state;

@@ -9,7 +9,8 @@ import TechListModal from './components/techs/TechListModal';
 
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
-import LogState from './context/LogState';
+import LogState from './context/log/LogState';
+import TechState from './context/tech/TechState';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -18,17 +19,19 @@ const App: React.FC = () => {
 
   return (
     <LogState>
-      <Fragment>
-        <SearchBar />
-        <div className="container">
-          <AddBtn />
-          <AddLogModal />
-          <EditLogModal />
-          <AddTechModal />
-          <TechListModal />
-          <Logs />
-        </div>
-      </Fragment>
+      <TechState>
+        <Fragment>
+          <SearchBar />
+          <div className="container">
+            <AddBtn />
+            <AddLogModal />
+            <EditLogModal />
+            <AddTechModal />
+            <TechListModal />
+            <Logs />
+          </div>
+        </Fragment>
+      </TechState>
     </LogState>
   );
 };

@@ -1,5 +1,5 @@
 export default interface TechModel {
-  id: string;
+  id?: number;
   firstName: string;
-  lastName: string
+  lastName: string;
 }

@@ -1,7 +1,7 @@
 export default interface LogModel {
-  id: string;
+  id?: number;
   message: string;
   attention: boolean;
   date: string;
-  tech: string
+  techsId: string;
 }

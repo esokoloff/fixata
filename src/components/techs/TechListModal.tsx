@@ -1,35 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import TechModel from '../../models/TechModel';
+import React, { useEffect, useContext, Fragment } from 'react';
+import techContext from '../../context/tech/techContext';
 import TechItem from './TechItem';
 
 const TechListModal: React.FC = () => {
-  const [techs, setTechs] = useState([] as TechModel[]);
-  const [loading, setLoading] = useState(false);
+  const { techs, getTechs, loading } = useContext(techContext);
 
   useEffect(() => {
     getTechs();
   }, []);
 
-  const getTechs = async () => {
-    setLoading(true);
-
-    const res = await fetch('/techs');
-    const data = await res.json();
-
-    setTechs(data);
-    setLoading(false);
-  };
-
   return (
     <div id="tech-list-modal" className="modal">
-        <div className="modal-content">
-          <h4>Technician List</h4>
-          <ul className="collection">
-            {!loading && techs.map(tech => (
-              <TechItem tech={tech} key={tech.id}/>
-            ))}
-          </ul>
-        </div>
+      <div className="modal-content">
+        {!loading && !techs.length ? (
+          <h5 style={{ textAlign: 'center' }}>No technicians added</h5>
+        ) : (
+          <Fragment>
+            <h4>Technician List</h4>
+            <ul className="collection">
+              {techs.map((tech) => (
+                <TechItem tech={tech} key={tech.id!} />
+              ))}
+            </ul>
+          </Fragment>
+        )}
+      </div>
     </div>
   );
 };

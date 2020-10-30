@@ -7,8 +7,8 @@ const EditLogModal: React.FC = () => {
   const [tech, setTech] = useState('');
 
   const onSubmit = () => {
-    if(message === '' || tech === '') {
-      M.toast({ html: 'Please, enter a message and tech'});
+    if (message === '' || tech === '') {
+      M.toast({ html: 'Please, enter a message and tech' });
     } else {
       console.log(message, tech, attention);
 
@@ -17,8 +17,7 @@ const EditLogModal: React.FC = () => {
       setTech('');
       setAttention(false);
     }
-
-  }
+  };
 
   return (
     <div id="edit-log-modal" className="modal" style={modalStyle}>
@@ -92,7 +91,7 @@ const EditLogModal: React.FC = () => {
 
 const modalStyle = {
   width: '75%',
-  height: '75%'
+  height: '75%',
 };
 
 export default EditLogModal;

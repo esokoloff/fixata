@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import LogContext from '../../context/logContext';
+import LogContext from '../../context/log/logContext';
 import LogItem from './LogItem';
 import Preloader from '../layout/Preloader';
 
@@ -8,7 +8,6 @@ const Logs: React.FC = () => {
 
   useEffect(() => {
     getLogs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
@@ -23,7 +22,7 @@ const Logs: React.FC = () => {
       {logs.length === 0 ? (
         <p className="center">No logs to show...</p>
       ) : (
-        logs.map((log) => <LogItem log={log} key={log.id} />)
+        logs.map((log) => <LogItem log={log} />)
       )}
     </ul>
   );

@@ -1,35 +1,39 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import M from 'materialize-css';
+import techContext from '../../context/tech/techContext';
+import TechModel from '../../models/TechModel';
+
+const defaultTechState: TechModel = {
+  firstName: '',
+  lastName: '',
+};
 
 const AddTechModal: React.FC = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const { addTech } = useContext(techContext);
+  const [tech, setTech] = useState(defaultTechState);
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setTech((prevState) => ({ ...prevState, [name]: value }));
+  };
 
   const onSubmit = () => {
-    if(firstName === '' || lastName === '') {
-      M.toast({ html: 'Please, enter the first and last name'});
+    if (tech.firstName === '' || tech.lastName === '') {
+      M.toast({ html: 'Please, enter first and last name' });
     } else {
-      console.log(firstName, lastName);
-      
-      // Clear fields
-      setFirstName('');
-      setLastName('');
+      addTech(tech);
+      setTech(defaultTechState);
+      M.toast({ html: 'Technician added successfully' });
     }
-  }
+  };
   return (
     <div id="add-tech-modal" className="modal">
       <div className="modal-content">
         <h4>New Technician</h4>
         <div className="row">
           <div className="input-field">
-            <input
-              type="text"
-              name="firstName"
-              value={firstName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setFirstName(e.target.value)
-              }
-            />
+            <input type="text" name="firstName" onChange={onChange} />
             <label htmlFor="firstName" className="active">
               First Name
             </label>
@@ -37,14 +41,7 @@ const AddTechModal: React.FC = () => {
         </div>
         <div className="row">
           <div className="input-field">
-            <input
-              type="text"
-              name="lastName"
-              value={lastName}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setLastName(e.target.value)
-              }
-            />
+            <input type="text" name="lastName" onChange={onChange} />
             <label htmlFor="lastName" className="active">
               Last Name
             </label>
