@@ -65,6 +65,11 @@ interface SetTechErrorAction {
   payload: string;
 }
 
+interface DeleteTechAction {
+  type: typeof DELETE_TECH;
+  payload: number;
+}
+
 export type LogActionTypes =
   | GetLogsAction
   | AddLogAction
@@ -77,4 +82,5 @@ export type LogActionTypes =
 export type TechActionTypes =
   | GetTechsAction
   | AddTechAction
-  | SetTechErrorAction;
+  | SetTechErrorAction
+  | DeleteTechAction;

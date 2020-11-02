@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
 import TechModel from '../../models/TechModel';
-import { ADD_TECH, GET_TECHS, TECHS_ERROR } from '../types';
+import { ADD_TECH, DELETE_TECH, GET_TECHS, TECHS_ERROR } from '../types';
 import TechContext from './techContext';
 import techReducer from './techReducer';
 
@@ -61,8 +61,28 @@ const TechState = (props: any) => {
     }
   };
 
+  const deleteTech = async (id: number) => {
+    const options = {
+      method: 'DELETE',
+    };
+
+    try {
+      await fetch(`/techs/${id}`, options);
+
+      dispatch({
+        type: DELETE_TECH,
+        payload: id,
+      });
+    } catch (err) {
+      dispatch({
+        type: TECHS_ERROR,
+        payload: err.response.data,
+      });
+    }
+  };
+
   return (
-    <TechContext.Provider value={{ ...state, getTechs, addTech }}>
+    <TechContext.Provider value={{ ...state, getTechs, addTech, deleteTech }}>
       {props.children}
     </TechContext.Provider>
   );
