@@ -59,6 +59,7 @@ const AddLogModal: React.FC = () => {
             <select
               name="techsId"
               className="browser-default"
+              value={log.techsId}
               onChange={onChange}
             >
               <option value="" disabled selected>

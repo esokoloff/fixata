@@ -33,7 +33,12 @@ const AddTechModal: React.FC = () => {
         <h4>New Technician</h4>
         <div className="row">
           <div className="input-field">
-            <input type="text" name="firstName" onChange={onChange} />
+            <input
+              type="text"
+              name="firstName"
+              value={tech.firstName}
+              onChange={onChange}
+            />
             <label htmlFor="firstName" className="active">
               First Name
             </label>
@@ -41,7 +46,12 @@ const AddTechModal: React.FC = () => {
         </div>
         <div className="row">
           <div className="input-field">
-            <input type="text" name="lastName" onChange={onChange} />
+            <input
+              type="text"
+              name="lastName"
+              value={tech.lastName}
+              onChange={onChange}
+            />
             <label htmlFor="lastName" className="active">
               Last Name
             </label>
