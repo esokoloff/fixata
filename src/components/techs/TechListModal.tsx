@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, Fragment } from 'react';
+import React, { useEffect, useContext } from 'react';
 import techContext from '../../context/tech/techContext';
 import TechItem from './TechItem';
 
@@ -15,14 +15,14 @@ const TechListModal: React.FC = () => {
         {!loading && !techs.length ? (
           <h5 style={{ textAlign: 'center' }}>No technicians added</h5>
         ) : (
-          <Fragment>
+          <>
             <h4>Technician List</h4>
             <ul className="collection">
               {techs.map((tech) => (
                 <TechItem tech={tech} key={tech.id!} />
               ))}
             </ul>
-          </Fragment>
+          </>
         )}
       </div>
     </div>
