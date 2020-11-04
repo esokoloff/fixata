@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import M from 'materialize-css';
 import techContext from '../../context/tech/techContext';
 import TechModel from '../../models/TechModel';
@@ -11,6 +11,11 @@ const defaultTechState: TechModel = {
 const AddTechModal: React.FC = () => {
   const { addTech } = useContext(techContext);
   const [tech, setTech] = useState(defaultTechState);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    M.Modal.init(modalRef.current!);
+  }, []);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,7 +33,7 @@ const AddTechModal: React.FC = () => {
     }
   };
   return (
-    <div id="add-tech-modal" className="modal">
+    <div id="add-tech-modal" ref={modalRef} className="modal">
       <div className="modal-content">
         <h4>New Technician</h4>
         <div className="row">

@@ -2,17 +2,33 @@ import React, { useReducer } from 'react';
 import LogContext from './logContext';
 import LogModel from '../../models/LogModel';
 import logReducer from './logReducer';
-import { DELETE_LOG, GET_LOGS, LOGS_ERROR } from '../types';
+import {
+  DELETE_LOG,
+  GET_LOGS,
+  LOGS_ERROR,
+  SET_CURRENT_LOG,
+  CLEAR_CURRENT_LOG,
+  UPDATE_LOG,
+} from '../types';
 import { ADD_LOG } from '../types';
 
 export interface LogStateProps {
   logs: LogModel[];
+  current: LogModel;
   loading: Boolean;
   error: string;
 }
 
+export const defaultLogState: LogModel = {
+  message: '',
+  attention: false,
+  date: '',
+  techsId: '',
+};
+
 const initialState: LogStateProps = {
   logs: [],
+  current: defaultLogState,
   loading: true,
   error: '',
 };
@@ -58,6 +74,31 @@ const LogState = (props: any) => {
     }
   };
 
+  const updateLog = async (log: LogModel) => {
+    const options = {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(log),
+    };
+
+    try {
+      const res = await fetch(`/logs/${log.id}`, options);
+      const data = await res.json();
+
+      dispatch({
+        type: UPDATE_LOG,
+        payload: data,
+      });
+    } catch (err) {
+      dispatch({
+        type: LOGS_ERROR,
+        payload: err.response.data,
+      });
+    }
+  };
+
   const deleteLog = async (id: number) => {
     const options = {
       method: 'DELETE',
@@ -78,8 +119,31 @@ const LogState = (props: any) => {
     }
   };
 
+  const setCurrent = (log: LogModel) => {
+    dispatch({
+      type: SET_CURRENT_LOG,
+      payload: log,
+    });
+  };
+
+  const clearCurrent = () => {
+    dispatch({
+      type: CLEAR_CURRENT_LOG,
+    });
+  };
+
   return (
-    <LogContext.Provider value={{ ...state, getLogs, addLog, deleteLog }}>
+    <LogContext.Provider
+      value={{
+        ...state,
+        getLogs,
+        addLog,
+        updateLog,
+        deleteLog,
+        setCurrent,
+        clearCurrent,
+      }}
+    >
       {props.children}
     </LogContext.Provider>
   );

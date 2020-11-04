@@ -4,8 +4,8 @@ import TechModel from '../models/TechModel';
 export const GET_LOGS = 'GET_LOGS';
 export const ADD_LOG = 'ADD_LOG';
 export const DELETE_LOG = 'DELETE_LOG';
-export const SET_CURRENT = 'SET_CURRENT';
-export const CLEAR_CURRENT = 'CLEAR_CURRENT';
+export const SET_CURRENT_LOG = 'SET_CURRENT';
+export const CLEAR_CURRENT_LOG = 'CLEAR_CURRENT';
 export const UPDATE_LOG = 'UPDATE_LOG';
 export const CLEAR_LOGS = 'CLEAR_LOGS';
 export const SET_LOADING = 'SET_LOADING';
@@ -33,12 +33,12 @@ interface DeleteLogAction {
 }
 
 interface SetCurrentAction {
-  type: typeof SET_CURRENT;
+  type: typeof SET_CURRENT_LOG;
   payload: LogModel;
 }
 
 interface ClearCurrentAction {
-  type: typeof CLEAR_CURRENT;
+  type: typeof CLEAR_CURRENT_LOG;
 }
 
 interface SetLogErrorActon {
@@ -48,6 +48,11 @@ interface SetLogErrorActon {
 
 interface ClearLogErrorAction {
   type: typeof CLEAR_LOGS_ERROR;
+}
+
+interface UpdateLogAction {
+  type: typeof UPDATE_LOG;
+  payload: LogModel;
 }
 
 interface GetTechsAction {
@@ -74,6 +79,7 @@ export type LogActionTypes =
   | GetLogsAction
   | AddLogAction
   | DeleteLogAction
+  | UpdateLogAction
   | SetCurrentAction
   | ClearCurrentAction
   | SetLogErrorActon

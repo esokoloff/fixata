@@ -5,9 +5,9 @@ import techContext from '../../context/tech/techContext';
 import LogModel from '../../models/LogModel';
 
 const LogItem: React.FC<{ log: LogModel }> = ({ log }) => {
-  const { deleteLog } = useContext(logContext);
+  const { deleteLog, setCurrent } = useContext(logContext);
   const { techs } = useContext(techContext);
-  const [techName, setTechName] = useState(' undefined ');
+  const [techName, setTechName] = useState(' ');
 
   useEffect(() => {
     const tech = techs.find((tech) => tech.id === parseInt(log.techsId));
@@ -28,7 +28,8 @@ const LogItem: React.FC<{ log: LogModel }> = ({ log }) => {
     <li className="collection-item">
       <div>
         <a
-          href="#edit-log-modal"
+          onClick={() => setCurrent(log)}
+          href="#log-modal"
           className={`modal-trigger ${
             log.attention ? 'red-text' : 'blue-text'
           }`}

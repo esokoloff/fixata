@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import M from 'materialize-css';
 import LogModel from '../../models/LogModel';
 import logContext from '../../context/log/logContext';
@@ -13,10 +13,32 @@ const defaultLogState: LogModel = {
 
 type PropsChangeElement = HTMLInputElement | HTMLSelectElement;
 
-const AddLogModal: React.FC = () => {
-  const { addLog } = useContext(logContext);
+const LogModal: React.FC = () => {
+  const {
+    addLog,
+    updateLog,
+    current: { message: isEditMode },
+    current,
+    clearCurrent,
+  } = useContext(logContext);
   const { techs } = useContext(techContext);
   const [log, setLog] = useState(defaultLogState);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    M.Modal.init(modalRef.current!, {
+      onCloseEnd: () => {
+        clearCurrent();
+        setLog(defaultLogState);
+      },
+    });
+  }, []);
+
+  useEffect(() => {
+    if (isEditMode) {
+      setLog(current);
+    }
+  }, [isEditMode, current]);
 
   const onChange = (e: React.ChangeEvent<PropsChangeElement>) => {
     const { name, value } = e.target;
@@ -28,19 +50,25 @@ const AddLogModal: React.FC = () => {
   };
 
   const onSubmit = () => {
+    console.log(log);
     if (log.message === '' || !log.techsId) {
       M.toast({ html: 'Please, enter a messege and tech' });
     } else {
-      addLog(log);
+      if (isEditMode) {
+        updateLog(log);
+        M.toast({ html: 'Log updated successfully' });
+      } else {
+        addLog(log);
+        M.toast({ html: 'Log added successfully' });
+      }
       setLog(defaultLogState);
-      M.toast({ html: 'Log added successfully' });
     }
   };
 
   return (
-    <div id="add-log-modal" className="modal" style={modalStyle}>
+    <div id="log-modal" ref={modalRef} className="modal" style={modalStyle}>
       <div className="modal-content">
-        <h4>Enter System Log</h4>
+        <h4>{isEditMode ? 'Edit System Log' : 'Enter System Log'}</h4>
         <div className="row">
           <div className="input-field">
             <input
@@ -49,9 +77,11 @@ const AddLogModal: React.FC = () => {
               value={log.message}
               onChange={onChange}
             />
-            <label htmlFor="message" className="active">
-              Log Message
-            </label>
+            {!isEditMode && (
+              <label htmlFor="message" className="active">
+                Log Message
+              </label>
+            )}
           </div>
         </div>
         <div className="row">
@@ -103,7 +133,7 @@ const AddLogModal: React.FC = () => {
           onClick={onSubmit}
           className="modal-close waves-effect waves-green btn blue"
         >
-          Enter
+          {isEditMode ? 'Edit' : 'Enter'}
         </a>
       </div>
     </div>
@@ -115,4 +145,4 @@ const modalStyle = {
   height: '60%',
 };
 
-export default AddLogModal;
+export default LogModal;
