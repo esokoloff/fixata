@@ -9,11 +9,14 @@ import {
   SET_CURRENT_LOG,
   CLEAR_CURRENT_LOG,
   UPDATE_LOG,
+  FILTER_LOGS,
+  CLEAR_FILTER,
 } from '../types';
 import { ADD_LOG } from '../types';
 
 export interface LogStateProps {
   logs: LogModel[];
+  filterValue: string;
   current: LogModel;
   loading: Boolean;
   error: string;
@@ -28,6 +31,7 @@ export const defaultLogState: LogModel = {
 
 const initialState: LogStateProps = {
   logs: [],
+  filterValue: '',
   current: defaultLogState,
   loading: true,
   error: '',
@@ -132,6 +136,19 @@ const LogState = (props: any) => {
     });
   };
 
+  const setFilter = (value: string) => {
+    dispatch({
+      type: FILTER_LOGS,
+      payload: value,
+    });
+  };
+
+  const clearFilter = () => {
+    dispatch({
+      type: CLEAR_FILTER,
+    });
+  };
+
   return (
     <LogContext.Provider
       value={{
@@ -142,6 +159,8 @@ const LogState = (props: any) => {
         deleteLog,
         setCurrent,
         clearCurrent,
+        setFilter,
+        clearFilter,
       }}
     >
       {props.children}

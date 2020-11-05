@@ -16,6 +16,8 @@ export const GET_TECHS = 'GET_TECHS';
 export const ADD_TECH = 'ADD_TECH';
 export const DELETE_TECH = 'DELETE_TECH';
 export const TECHS_ERROR = 'TECHS_ERROR';
+export const FILTER_LOGS = 'FILTER_LOGS';
+export const CLEAR_FILTER = 'CLEAR_FILTER';
 
 interface GetLogsAction {
   type: typeof GET_LOGS;
@@ -75,6 +77,15 @@ interface DeleteTechAction {
   payload: number;
 }
 
+interface SetFilterAction {
+  type: typeof FILTER_LOGS;
+  payload: string;
+}
+
+interface ClearFilterAction {
+  type: typeof CLEAR_FILTER;
+}
+
 export type LogActionTypes =
   | GetLogsAction
   | AddLogAction
@@ -83,7 +94,9 @@ export type LogActionTypes =
   | SetCurrentAction
   | ClearCurrentAction
   | SetLogErrorActon
-  | ClearLogErrorAction;
+  | ClearLogErrorAction
+  | SetFilterAction
+  | ClearFilterAction;
 
 export type TechActionTypes =
   | GetTechsAction

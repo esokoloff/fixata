@@ -9,6 +9,8 @@ interface LogContextProps extends LogStateProps {
   deleteLog: (id: number) => Promise<void>;
   setCurrent: (log: LogModel) => void;
   clearCurrent: () => void;
+  setFilter: (value: string) => void;
+  clearFilter: () => void;
 }
 
 const logContext = React.createContext({} as LogContextProps);

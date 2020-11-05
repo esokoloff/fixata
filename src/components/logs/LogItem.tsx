@@ -11,7 +11,6 @@ const LogItem: React.FC<{ log: LogModel }> = ({ log }) => {
 
   useEffect(() => {
     const tech = techs.find((tech) => tech.id === parseInt(log.techsId));
-    console.log(tech);
 
     if (tech) {
       setTechName(` ${tech.firstName} ${tech.lastName} `);

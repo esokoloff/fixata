@@ -1,7 +1,9 @@
 import {
   ADD_LOG,
   CLEAR_CURRENT_LOG,
+  CLEAR_FILTER,
   DELETE_LOG,
+  FILTER_LOGS,
   GET_LOGS,
   LogActionTypes,
   SET_CURRENT_LOG,
@@ -41,6 +43,18 @@ export default (state: LogStateProps, action: LogActionTypes) => {
       return {
         ...state,
         current: defaultLogState,
+      };
+    }
+    case FILTER_LOGS: {
+      return {
+        ...state,
+        filterValue: action.payload,
+      };
+    }
+    case CLEAR_FILTER: {
+      return {
+        ...state,
+        filterValue: '',
       };
     }
     default: {
